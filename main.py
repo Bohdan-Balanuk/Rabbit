@@ -1,5 +1,6 @@
 from pygame import*
 from time import time as time1
+from time import sleep
 from random import randint 
 import sys
 
@@ -16,6 +17,7 @@ class GameCard():
     def __init__(self, x, y, width, height, color = None):
         self.rect = Rect(x, y, width, height)
         self.fill_color = color
+        self.color = color
 
     def frame(self, window, color= (0, 0, 0), thinkness = 5):
         draw.rect(window, color, self.rect, thinkness)
@@ -24,10 +26,10 @@ class GameCard():
         draw.rect(window, self.fill_color, self.rect)
         self.frame()
 
-    def set_text(self, text, fsize = 25, text_color=(0,0,0)):
-        self.image = font.SysFont("Arial", fsize).render(text, True, text_color)
+    def set_text(self, text, fsize = 50, text_color=(0,0,0)):
+        self.image = font.SysFont("Arial", fsize).render(text, True, self.color)
 
-    def draw_text(self, window,  shift_x=5, shift_y=55):
+    def draw_text(self, shift_x=5, shift_y=55):
         window.blit(self.image, (self.rect.x + shift_x, self.rect.y + shift_y))
 
     def draw_info(self, window):
@@ -73,9 +75,12 @@ class Carrot():
     def colliderect(self, rect):
         return self.rect.colliderect(rect)
     
-    def move(self):
+    def move(self, rect):
         self.rect.x = randint(0, 1000)
         self.rect.y = randint(430, 650)
+        if self.colliderect(rect):
+            self.rect.x = randint(0, 1000)
+            self.rect.y = randint(430, 650)
 
     def draw_carrot(self):
         window.blit(self.image, (self.rect.x, self.rect.y))
@@ -86,11 +91,19 @@ player_right = False
 player_left = False
 player_up = False
 player_down = False
+amount = 0
+time_stats = 40
 
 filename = "Objects/Rabbit_right.png"
 
 player = Rabbit(filename, 50, 550, 100, 100)
 carrot = Carrot("Objects/Carrot.png", randint(0, 1000), randint(430, 650), 70, 90)
+
+stats_text = GameCard(0, -20, 100, 100, (0, 0, 255))
+stats_text.set_text("Зібрано:")
+
+stats = GameCard(170, -20, 100, 100, (0, 0, 255))
+stats.set_text(str(amount))    
 
 while game:
 
@@ -134,11 +147,19 @@ while game:
         player.move_Down()
 
     if carrot.colliderect(player):
-        carrot.move()
+        carrot.move(player)
+        amount += 1
+        stats.set_text(str(amount))
+
+    if amount == 15:
+        game = False
 
     player.change_filename(filename)
     player.draw_player()
     carrot.draw_carrot()
+
+    stats_text.draw_text()
+    stats.draw_text()
 
     display.update()
     clock.tick(120)
