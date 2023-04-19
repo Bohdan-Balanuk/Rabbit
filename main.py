@@ -7,6 +7,9 @@ import sys
 init()
 clock = time.Clock()
 
+mixer.music.load("Objects/prikolnaja_muzika_i_ringtoni_na_telefon_-_derevnja_durakov_(z2.fm).mp3") 
+mixer.music.play()
+
 window = display.set_mode((1150, 750))
 display.set_caption('Rabbit')
 background = transform.scale(image.load("Objects/Background.png"), (1150, 750))
@@ -94,7 +97,7 @@ player_down = False
 amount = 0
 time_stats = 0
 
-filename = "Objects/Rabbit_right.png"
+filename = "Objects/RabbitR.png"
 
 player = Rabbit(filename, 50, 550, 100, 100)
 carrot = Carrot("Objects/Carrot.png", randint(0, 1000), randint(430, 650), 70, 90)
@@ -105,12 +108,6 @@ stats_text.set_text("Зібрано:")
 stats = GameCard(170, -20, 100, 100, (0, 0, 255))
 stats.set_text(str(amount))
 
-time_ = GameCard(780, -20, 100, 100, (0, 0, 255))
-time_.set_text("Час:")
-
-time_left = GameCard(980, -20, 100, 100, (0, 0, 255))
-time_left.set_text(str(int(time_stats)))
-
 while game:
     time_stats += time1()
     time_stats = int(time_stats)
@@ -119,15 +116,16 @@ while game:
 
     for ev in event.get():
         if ev.type == QUIT:
+            finish_image = font.SysFont("Goudy Stout", 50).render("GOOD BYE", True, (255, 0, 255))
             game = False
         
         if ev.type == KEYDOWN:
             if ev.key == K_RIGHT:
                 player_right = True
-                filename = "Objects/Rabbit_right.png"
+                filename = "Objects/RabbitR.png"
             if ev.key == K_LEFT:
                 player_left = True
-                filename = "Objects/Rabbit_LEFT.png"
+                filename = "Objects/RabbitL.png"
 
             if ev.key == K_UP:
                 player_up = True
@@ -159,7 +157,9 @@ while game:
         amount += 1
         stats.set_text(str(amount))
 
-    time_left.set_text(str(int(time_stats)))
+    if amount == 15:
+        finish_image = font.SysFont("Goudy Stout", 50).render("YOU WIN", True, (255, 0, 255))
+        game = False
 
     player.change_filename(filename)
     player.draw_player()
@@ -167,8 +167,17 @@ while game:
 
     stats_text.draw_text()
     stats.draw_text()
-    time_.draw_text()
-    time_left.draw_text()
 
     display.update()
+    clock.tick(120)
+
+game = True
+counter = 0
+window.blit(finish_image,(window.get_width() / 2 - 220, window.get_height() / 2 - 70))
+display.update()
+while counter != 15*60 and game:
+    for e in event.get():
+        if e.type == QUIT:
+            game = False
+    counter += 1
     clock.tick(120)
