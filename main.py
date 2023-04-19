@@ -92,7 +92,7 @@ player_left = False
 player_up = False
 player_down = False
 amount = 0
-time_stats = 40
+time_stats = 0
 
 filename = "Objects/Rabbit_right.png"
 
@@ -103,9 +103,17 @@ stats_text = GameCard(0, -20, 100, 100, (0, 0, 255))
 stats_text.set_text("Зібрано:")
 
 stats = GameCard(170, -20, 100, 100, (0, 0, 255))
-stats.set_text(str(amount))    
+stats.set_text(str(amount))
+
+time_ = GameCard(780, -20, 100, 100, (0, 0, 255))
+time_.set_text("Час:")
+
+time_left = GameCard(980, -20, 100, 100, (0, 0, 255))
+time_left.set_text(str(int(time_stats)))
 
 while game:
+    time_stats += time1()
+    time_stats = int(time_stats)
 
     window.blit(background, (0,0))
 
@@ -151,8 +159,7 @@ while game:
         amount += 1
         stats.set_text(str(amount))
 
-    if amount == 15:
-        game = False
+    time_left.set_text(str(int(time_stats)))
 
     player.change_filename(filename)
     player.draw_player()
@@ -160,6 +167,8 @@ while game:
 
     stats_text.draw_text()
     stats.draw_text()
+    time_.draw_text()
+    time_left.draw_text()
 
     display.update()
     clock.tick(120)
