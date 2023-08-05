@@ -7,12 +7,10 @@ import sys
 init()
 clock = time.Clock()
 
-mixer.music.load("Objects/prikolnaja_muzika_i_ringtoni_na_telefon_-_derevnja_durakov_(z2.fm).mp3") 
-mixer.music.play()
 
 window = display.set_mode((1150, 750))
 display.set_caption('Rabbit')
-background = transform.scale(image.load("Objects/Background.png"), (1150, 750))
+background = transform.scale(image.load("Rabbit\Objects/Background.png"), (1150, 750))
 window.blit(background, (0,0))
 
 class GameCard():
@@ -97,10 +95,10 @@ player_down = False
 amount = 0
 time_stats = 0
 
-filename = "Objects/RabbitR.png"
+filename = "Rabbit\Objects/RabbitR.png"
 
 player = Rabbit(filename, 50, 550, 100, 100)
-carrot = Carrot("Objects/Carrot.png", randint(0, 1000), randint(430, 650), 70, 90)
+carrot = Carrot("Rabbit\Objects/Carrot.png", randint(0, 1000), randint(430, 650), 70, 90)
 
 stats_text = GameCard(0, -20, 100, 100, (0, 0, 255))
 stats_text.set_text("Зібрано:")
@@ -122,10 +120,10 @@ while game:
         if ev.type == KEYDOWN:
             if ev.key == K_RIGHT:
                 player_right = True
-                filename = "Objects/RabbitR.png"
+                filename = "Rabbit\Objects/RabbitR.png"
             if ev.key == K_LEFT:
                 player_left = True
-                filename = "Objects/RabbitL.png"
+                filename = "Rabbit\Objects/RabbitL.png"
 
             if ev.key == K_UP:
                 player_up = True
